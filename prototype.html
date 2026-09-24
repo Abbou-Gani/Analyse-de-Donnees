@@ -1,0 +1,1864 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GestAnalyse — Plateforme d'analyse de données Excel &amp; Word</title>
+<style>
+/* ========== FONTES EXACTES searchable.com ========== */
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('prototype-fonts/Geist-latin.woff2') format('woff2');
+  unicode-range: u+00??, u+0131, u+0152-0153, u+02bb-02bc, u+02c6, u+02da, u+02dc, u+0304, u+0308, u+0329, u+2000-206f, u+20ac, u+2122, u+2191, u+2193, u+2212, u+2215, u+feff, u+fffd;
+}
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('prototype-fonts/Geist-latin-ext.woff2') format('woff2');
+  unicode-range: u+0100-02ba, u+02bd-02c5, u+02c7-02cc, u+02ce-02d7, u+02dd-02ff, u+0304, u+0308, u+0329, u+1d00-1dbf, u+1e00-1e9f, u+1ef2-1eff, u+2020, u+20a0-20ab, u+20ad-20c0, u+2113, u+2c60-2c7f, u+a720-a7ff;
+}
+@font-face {
+  font-family: 'FK Display';
+  src: url('prototype-fonts/FKDisplay-RegularAlt.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Instrument Serif';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('prototype-fonts/InstrumentSerif-latin.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('prototype-fonts/GeistMono-latin.woff2') format('woff2');
+}
+
+/* ========== TOKENS EXACTS searchable.com ========== */
+:root, [data-theme="terracotta"] {
+  --background: #fdfdfd;
+  --foreground: #1c1917;
+  --primary: #c15f3c;
+  --primary-fg: #fdfdfd;
+  --muted: #f5f5f4;
+  --muted-fg: #57534e;
+  --accent: #f5f5f4;
+  --border: #e7e5e4;
+  --ring: #c15f3c;
+  --radius: 0.625rem;
+  --terracotta-50: #f9efed;
+  --terracotta-100: #f5e3df;
+  --terracotta-200: #ecc6bd;
+  --terracotta-300: #e3a99b;
+  --terracotta-400: #da8c79;
+  --terracotta-500: #c15f3c;
+  --terracotta-600: #a64e2a;
+  --stone-50: #fafaf9;
+  --stone-100: #f5f5f4;
+  --stone-200: #e7e5e4;
+  --stone-300: #d6d3d1;
+  --stone-400: #a8a29e;
+  --stone-500: #78716c;
+  --stone-600: #57534e;
+  --stone-700: #44403c;
+  --stone-800: #292524;
+  --stone-900: #1c1917;
+  --stone-950: #0c0a09;
+  --accent-rgb: 193, 95, 60;
+}
+[data-theme="violet"] {
+  --primary: #7c3aed; --primary-fg: #fff; --ring: #7c3aed;
+  --terracotta-50: #f5f3ff; --terracotta-100: #ede9fe; --terracotta-200: #ddd6fe;
+  --terracotta-300: #c4b5fd; --terracotta-400: #a78bfa; --terracotta-500: #7c3aed;
+  --terracotta-600: #6d28d9; --accent-rgb: 124, 58, 237;
+}
+[data-theme="bleu"] {
+  --primary: #2563eb; --primary-fg: #fff; --ring: #2563eb;
+  --terracotta-50: #eff6ff; --terracotta-100: #dbeafe; --terracotta-200: #bfdbfe;
+  --terracotta-300: #93c5fd; --terracotta-400: #60a5fa; --terracotta-500: #2563eb;
+  --terracotta-600: #1d4ed8; --accent-rgb: 37, 99, 235;
+}
+[data-theme="vert"] {
+  --primary: #16a34a; --primary-fg: #fff; --ring: #16a34a;
+  --terracotta-50: #f0fdf4; --terracotta-100: #dcfce7; --terracotta-200: #bbf7d0;
+  --terracotta-300: #86efac; --terracotta-400: #4ade80; --terracotta-500: #16a34a;
+  --terracotta-600: #15803d; --accent-rgb: 22, 163, 74;
+}
+[data-theme="orange"] {
+  --primary: #ea580c; --primary-fg: #fff; --ring: #ea580c;
+  --terracotta-50: #fff7ed; --terracotta-100: #ffedd5; --terracotta-200: #fed7aa;
+  --terracotta-300: #fdba74; --terracotta-400: #fb923c; --terracotta-500: #ea580c;
+  --terracotta-600: #c2410c; --accent-rgb: 234, 88, 12;
+}
+[data-theme="rose"] {
+  --primary: #db2777; --primary-fg: #fff; --ring: #db2777;
+  --terracotta-50: #fdf2f8; --terracotta-100: #fce7f3; --terracotta-200: #fbcfe8;
+  --terracotta-300: #f9a8d4; --terracotta-400: #f472b6; --terracotta-500: #db2777;
+  --terracotta-600: #be185d; --accent-rgb: 219, 39, 119;
+}
+[data-theme="turquoise"] {
+  --primary: #0d9488; --primary-fg: #fff; --ring: #0d9488;
+  --terracotta-50: #f0fdfa; --terracotta-100: #ccfbf1; --terracotta-200: #99f6e4;
+  --terracotta-300: #5eead4; --terracotta-400: #2dd4bf; --terracotta-500: #0d9488;
+  --terracotta-600: #0f766e; --accent-rgb: 13, 148, 136;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Geist', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--background);
+  color: var(--stone-950);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 16px;
+  line-height: 1.5;
+}
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+ul, ol { list-style: none; }
+
+/* Barre prototype */
+.barre-proto {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 300;
+  background: #0a0a0a; border-bottom: 1px solid #262626;
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 20px; overflow-x: auto;
+}
+.barre-proto .titre-proto {
+  color: rgba(255,255,255,0.4); font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.08em; margin-right: 6px; white-space: nowrap;
+}
+.barre-proto button.nav {
+  background: transparent; border: 1px solid #262626; color: rgba(255,255,255,0.75);
+  padding: 5px 13px; border-radius: 9999px; font-size: 12.5px; font-weight: 500;
+  cursor: pointer; white-space: nowrap; font-family: inherit;
+  transition: all 0.15s ease;
+}
+.barre-proto button.nav.actif,
+.barre-proto button.nav:hover {
+  background: var(--terracotta-500); border-color: var(--terracotta-500); color: #fff;
+}
+.sep-proto { width: 1px; height: 20px; background: #262626; margin: 0 6px; flex-shrink: 0; }
+.pastilles { display: flex; gap: 7px; }
+.pastille-theme {
+  width: 18px; height: 18px; border-radius: 50%; cursor: pointer;
+  border: 2px solid transparent; transition: transform 0.15s;
+}
+.pastille-theme:hover { transform: scale(1.15); }
+.pastille-theme.actif { border-color: #fff; box-shadow: 0 0 0 1px #fff; }
+
+.vue { display: none; padding-top: 42px; }
+.vue.actif { display: block; }
+
+/* ========== BANNIÈRE ANNONCE (exact searchable) ========== */
+.banniere-annonce {
+  background: var(--terracotta-500);
+  color: #fff;
+  transition: background-color 0.15s;
+  display: block;
+}
+.banniere-annonce:hover { background: var(--terracotta-600); }
+.banniere-annonce .inner {
+  max-width: 80rem; margin: 0 auto; padding: 10px 16px;
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  flex-wrap: wrap; text-align: center;
+}
+.banniere-annonce p {
+  font-size: 13px; line-height: 1.25; font-weight: 500; color: #fff;
+}
+.banniere-annonce .lien {
+  font-size: 13px; font-weight: 500; color: #fff;
+  text-decoration: underline; text-underline-offset: 2px;
+  white-space: nowrap;
+}
+.banniere-annonce .lien:hover { opacity: 0.85; }
+.banniere-annonce .fleche { display: inline-block; margin-left: 4px; transition: transform 0.15s; }
+.banniere-annonce .lien:hover .fleche { transform: translateX(3px); }
+
+/* ========== HEADER / NAV (exact searchable) ========== */
+header.site-header {
+  position: sticky; top: 0; z-index: 200;
+  background: var(--stone-50);
+  border-bottom: 1px solid rgba(231, 229, 228, 0.4);
+  transition: border-color 0.15s;
+}
+.header-inner {
+  max-width: 80rem; margin: 0 auto; padding: 12px 24px;
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+}
+.logo-marque {
+  display: flex; align-items: center; gap: 9px;
+  font-size: 17px; font-weight: 600; letter-spacing: -0.02em;
+  color: var(--stone-900); flex-shrink: 0;
+}
+.logo-marque .rond-logo {
+  width: 28px; height: 28px; border-radius: 9999px;
+  background: var(--terracotta-500); color: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 600;
+}
+.liens-nav { display: flex; align-items: center; gap: 2px; list-style: none; }
+.liens-nav a, .liens-nav button {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 6px 12px; border-radius: 9999px;
+  font-size: 16px; font-weight: 500; color: var(--stone-600);
+  transition: color 0.1s, background 0.1s;
+  white-space: nowrap; background: transparent;
+}
+.liens-nav a:hover, .liens-nav button:hover,
+.liens-nav a:focus-visible, .liens-nav button:focus-visible {
+  color: var(--stone-900); background: transparent;
+}
+.liens-nav .chevron { width: 14px; height: 14px; opacity: 0.55; }
+.nav-droite { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.drapeau {
+  width: 20px; height: 14px; border-radius: 2px;
+  background: linear-gradient(90deg, #002395 33.3%, #fff 33.3% 66.6%, #ED2939 66.6%);
+  border: 1px solid var(--stone-200); flex-shrink: 0;
+}
+.btn-connex-nav {
+  display: inline-flex; align-items: center;
+  padding: 8px 16px; border-radius: 9999px;
+  font-size: 15px; font-weight: 500; color: var(--stone-900);
+  transition: background 0.15s;
+}
+.btn-connex-nav:hover { background: var(--stone-100); }
+.btn-cta-nav {
+  display: inline-flex; align-items: center;
+  padding: 8px 18px; border-radius: 9999px;
+  font-size: 15px; font-weight: 500;
+  background: var(--terracotta-500); color: #fff;
+  transition: background 0.15s;
+}
+.btn-cta-nav:hover { background: var(--terracotta-600); }
+
+/* ========== HERO (exact searchable) ========== */
+.hero {
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; background: var(--stone-50);
+  padding: 96px 16px 64px;
+}
+@media (min-width: 768px) {
+  .hero { padding: 96px 16px 96px; }
+}
+.hero-inner { position: relative; width: 100%; max-width: 80rem; margin: 0 auto; text-align: center; }
+.hero h1 {
+  font-family: 'Geist', sans-serif;
+  font-size: 28px; font-weight: 500; line-height: 1.05;
+  letter-spacing: -0.025em;
+  max-width: 340px; margin: 0 auto 16px;
+  color: var(--stone-950);
+}
+@media (min-width: 640px) {
+  .hero h1 { max-width: 56rem; font-size: 2.25rem; }
+}
+@media (min-width: 768px) {
+  .hero h1 { font-size: 3rem; }
+}
+.hero h1 .accent { color: var(--terracotta-500); }
+.hero .sous-hero {
+  font-size: 17px; color: var(--stone-600); line-height: 1.6;
+  max-width: 36rem; margin: 0 auto 20px; font-weight: 400;
+}
+@media (min-width: 640px) {
+  .hero .sous-hero { font-size: 18px; max-width: 40rem; }
+}
+.pills-formats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+.pill-inline {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #fff; color: var(--stone-700);
+  border: 1px solid var(--stone-200);
+  padding: 6px 14px 6px 6px; border-radius: 9999px;
+  font-size: 13.5px; font-weight: 500;
+  line-height: 1;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+.pill-inline .ico-pill {
+  width: 30px; height: 30px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+  background: var(--stone-100);
+}
+
+.boutons-hero {
+  display: flex; gap: 12px; justify-content: center;
+  flex-wrap: wrap; margin-bottom: 56px;
+}
+/* Bouton principal exact searchable : terracotta soft → fill au hover */
+.btn-hero-terracotta {
+  display: inline-flex; align-items: center; gap: 10px;
+  height: 45px; padding: 0 12px 0 20px;
+  border-radius: 9999px;
+  font-size: 14px; font-weight: 500;
+  background: rgba(var(--accent-rgb), 0.10);
+  color: var(--terracotta-500);
+  transition: all 0.2s ease;
+}
+.btn-hero-terracotta:hover {
+  background: var(--terracotta-500); color: #fff;
+}
+.btn-hero-terracotta .rond-fleche {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(var(--accent-rgb), 0.15);
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: all 0.2s ease;
+}
+.btn-hero-terracotta:hover .rond-fleche {
+  background: rgba(255,255,255,0.2); color: #fff;
+}
+/* Bouton secondaire exact : text-stone-900 hover:bg-stone-100 */
+.btn-hero-neutre {
+  display: inline-flex; align-items: center; gap: 8px;
+  height: 45px; padding: 0 22px;
+  border-radius: 9999px;
+  font-size: 14px; font-weight: 500;
+  color: var(--stone-900);
+  transition: background 0.15s;
+}
+.btn-hero-neutre:hover { background: var(--stone-100); }
+
+/* ========== MOCKUP PRODUIT ========== */
+.encadrement-mockup {
+  max-width: 68rem; margin: 0 auto;
+  border: 1px solid var(--stone-200);
+  border-radius: 16px 16px 0 0;
+  background: #fff;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.10), 0 0 0 1px rgba(0,0,0,0.03);
+  text-align: left;
+}
+.barre-nav-mock {
+  background: var(--stone-50); padding: 10px 14px;
+  display: flex; align-items: center; gap: 7px;
+  border-bottom: 1px solid var(--stone-200);
+}
+.pt-mock { width: 10px; height: 10px; border-radius: 50%; }
+.pt-mock.r { background: #ff5f57; }
+.pt-mock.j { background: #febc2e; }
+.pt-mock.v { background: #28c840; }
+.url-mock {
+  flex: 1; background: #fff; border: 1px solid var(--stone-200);
+  border-radius: 6px; padding: 5px 12px;
+  font-size: 12px; color: var(--stone-400); margin-left: 10px;
+  font-family: 'Geist Mono', monospace;
+}
+.corps-mock {
+  display: grid; grid-template-columns: 220px 1fr;
+  min-height: 420px; background: #fff;
+}
+@media (max-width: 768px) {
+  .corps-mock { grid-template-columns: 1fr; }
+  .side-mock { display: none; }
+}
+.side-mock {
+  background: var(--stone-50); border-right: 1px solid var(--stone-200);
+  padding: 18px 12px;
+}
+.side-mock .logo-mock {
+  font-size: 14px; font-weight: 600; padding: 0 8px 16px;
+  color: var(--stone-900); display: flex; align-items: center; gap: 7px;
+  letter-spacing: -0.02em;
+}
+.side-mock .logo-mock .rond {
+  width: 22px; height: 22px; border-radius: 9999px;
+  background: var(--terracotta-500); color: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 11px;
+}
+.nav-mock div {
+  padding: 7px 10px; border-radius: 6px; font-size: 13px;
+  color: var(--stone-600); margin-bottom: 2px;
+  display: flex; gap: 9px; align-items: center; font-weight: 500;
+}
+.nav-mock div.actif {
+  background: rgba(var(--accent-rgb), 0.10);
+  color: var(--terracotta-600); font-weight: 500;
+}
+.nav-mock .separateur-mock { height: 1px; background: var(--stone-200); margin: 12px 4px; }
+.plan-mock {
+  background: var(--stone-900); border-radius: 10px; padding: 14px;
+  color: #fff; margin-top: 14px;
+}
+.plan-mock .t {
+  font-size: 10px; color: var(--terracotta-400); font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.08em;
+}
+.plan-mock .i { font-size: 12.5px; color: var(--stone-400); margin: 6px 0 10px; }
+.jauge-mock { height: 5px; background: var(--stone-800); border-radius: 9999px; overflow: hidden; }
+.jauge-mock div { height: 100%; width: 40%; background: var(--terracotta-500); border-radius: 9999px; }
+.main-mock { padding: 24px; }
+.entete-mock {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 20px; flex-wrap: wrap; gap: 12px;
+}
+.entete-mock h3 { font-size: 16px; font-weight: 600; letter-spacing: -0.02em; color: var(--stone-900); }
+.entete-mock .sous-mock { font-size: 13px; color: var(--stone-400); margin-top: 3px; font-weight: 400; }
+.boutons-entete { display: flex; gap: 10px; align-items: center; }
+.btn-import-mock {
+  background: var(--terracotta-500); color: #fff; border: none;
+  padding: 8px 16px; border-radius: 9999px;
+  font-size: 13px; font-weight: 500; font-family: inherit; cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-import-mock:hover { background: var(--terracotta-600); }
+.avatar-mock {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: var(--stone-800); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 500; font-size: 13px;
+}
+.kpis-mock {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 12px; margin-bottom: 16px;
+}
+@media (max-width: 640px) { .kpis-mock { grid-template-columns: repeat(2, 1fr); } }
+.kpi-mock {
+  background: var(--stone-50); border: 1px solid var(--stone-200);
+  border-radius: 10px; padding: 14px;
+}
+.kpi-mock .l {
+  font-size: 10px; color: var(--stone-400); font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.05em;
+}
+.kpi-mock .v { font-size: 24px; font-weight: 500; margin-top: 4px; letter-spacing: -0.03em; color: var(--stone-900); }
+.kpi-mock .v.a { color: var(--terracotta-500); }
+.kpi-mock .v.o { color: #d97706; }
+.graph-mock {
+  background: var(--stone-50); border: 1px solid var(--stone-200);
+  border-radius: 10px; padding: 18px; height: 160px;
+  display: flex; align-items: flex-end; gap: 10px;
+}
+.bar-mock {
+  flex: 1; background: var(--terracotta-500); opacity: 0.85;
+  border-radius: 4px 4px 0 0; transition: opacity 0.15s;
+}
+.bar-mock:hover { opacity: 1; }
+.bar-mock.dim { opacity: 0.35; }
+
+/* ========== SECTIONS ========== */
+.section { padding: 80px 24px; max-width: 72rem; margin: 0 auto; }
+@media (min-width: 768px) { .section { padding: 100px 24px; } }
+.section-titre { text-align: center; margin-bottom: 56px; }
+.section-titre h2 {
+  font-family: 'Geist', sans-serif;
+  font-size: 28px; font-weight: 500; line-height: 1.25;
+  letter-spacing: -0.025em; color: var(--stone-950);
+  max-width: 40rem; margin: 0 auto;
+}
+@media (min-width: 768px) {
+  .section-titre h2 { font-size: 2.25rem; }
+}
+.section-titre p {
+  color: var(--stone-600); font-size: 17px; line-height: 1.65;
+  max-width: 36rem; margin: 16px auto 0;
+}
+.sur-titre {
+  display: inline-block; color: var(--terracotta-600);
+  font-weight: 500; font-size: 13px;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  background: rgba(var(--accent-rgb), 0.10);
+  padding: 5px 14px; border-radius: 9999px; margin-bottom: 16px;
+}
+
+/* Bande logos */
+.bande-logos {
+  border-top: 1px solid var(--stone-200);
+  border-bottom: 1px solid var(--stone-200);
+  padding: 40px 24px; background: #fff;
+}
+.logos-inner {
+  max-width: 68rem; margin: 0 auto;
+  display: flex; justify-content: space-around; align-items: center;
+  flex-wrap: wrap; gap: 28px;
+}
+.logos-inner span {
+  font-size: 17px; font-weight: 600; color: var(--stone-300);
+  letter-spacing: -0.02em;
+}
+.logos-label {
+  text-align: center; font-size: 13px; font-weight: 500;
+  color: var(--stone-400); text-transform: uppercase;
+  letter-spacing: 0.08em; margin-bottom: 28px;
+}
+
+/* Bento features */
+.bento { display: grid; grid-template-columns: 1fr; gap: 16px; }
+@media (min-width: 768px) { .bento { grid-template-columns: repeat(3, 1fr); } }
+.b-carte {
+  background: var(--stone-50); border: 1px solid var(--stone-200);
+  border-radius: 16px; padding: 28px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.b-carte:hover {
+  border-color: var(--stone-300);
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);
+}
+.b-carte.large { grid-column: span 1; }
+@media (min-width: 768px) { .b-carte.large { grid-column: span 2; } }
+.b-carte.fonce { background: var(--stone-950); border-color: var(--stone-900); }
+.b-carte.fonce h3 { color: #fff; }
+.b-carte.fonce p { color: var(--stone-400); }
+.b-ico {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; background: #fff;
+  border: 1px solid var(--stone-200); margin-bottom: 18px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+.b-carte.fonce .b-ico { background: var(--stone-900); border-color: var(--stone-800); }
+.b-carte h3 {
+  font-size: 17px; font-weight: 500; margin-bottom: 8px;
+  letter-spacing: -0.02em; color: var(--stone-900);
+}
+.b-carte p { color: var(--stone-600); font-size: 15px; line-height: 1.65; }
+.b-stat-chiffre {
+  font-size: 48px; font-weight: 500; color: var(--terracotta-500);
+  letter-spacing: -0.04em; line-height: 1;
+}
+.liste-points { margin-top: 16px; display: flex; flex-direction: column; gap: 9px; }
+.liste-points li {
+  color: var(--stone-700); font-size: 14px;
+  display: flex; gap: 10px; font-weight: 400; align-items: flex-start;
+}
+.liste-points li::before {
+  content: '✓'; color: var(--terracotta-500); font-weight: 600; flex-shrink: 0;
+}
+.b-carte.fonce .liste-points li { color: var(--stone-300); }
+
+/* Étapes */
+.bloc-gris {
+  background: var(--stone-50);
+  border-top: 1px solid var(--stone-200);
+  border-bottom: 1px solid var(--stone-200);
+}
+.etapes { display: grid; grid-template-columns: 1fr; gap: 20px; }
+@media (min-width: 768px) { .etapes { grid-template-columns: repeat(3, 1fr); } }
+.etape {
+  background: #fff; border: 1px solid var(--stone-200);
+  border-radius: 16px; padding: 32px 26px; text-align: center;
+}
+.num-etape {
+  width: 44px; height: 44px; border-radius: 9999px;
+  background: var(--stone-900); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; font-weight: 500; margin: 0 auto 18px;
+}
+.etape h3 {
+  font-size: 16px; font-weight: 500; margin-bottom: 8px;
+  letter-spacing: -0.02em; color: var(--stone-900);
+}
+.etape p { color: var(--stone-600); font-size: 14.5px; line-height: 1.65; }
+
+/* Témoignages */
+.temoignages { display: grid; grid-template-columns: 1fr; gap: 16px; }
+@media (min-width: 768px) { .temoignages { grid-template-columns: repeat(3, 1fr); } }
+.temoignage {
+  background: #fff; border: 1px solid var(--stone-200);
+  border-radius: 16px; padding: 28px;
+}
+.etoiles { color: #d97706; margin-bottom: 14px; letter-spacing: 2px; font-size: 14px; }
+.temoignage p {
+  color: var(--stone-700); font-size: 15px; line-height: 1.7;
+  margin-bottom: 20px; font-style: italic;
+}
+.auteur-t { display: flex; align-items: center; gap: 12px; }
+.avatar-t {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--stone-800); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 500; font-size: 14px;
+}
+.auteur-t .nom { font-weight: 500; font-size: 14px; color: var(--stone-900); }
+.auteur-t .role { color: var(--stone-400); font-size: 13px; }
+
+/* Tarifs */
+.prix { display: grid; grid-template-columns: 1fr; gap: 20px; align-items: stretch; }
+@media (min-width: 768px) { .prix { grid-template-columns: repeat(3, 1fr); } }
+.offre {
+  background: #fff; border: 1px solid var(--stone-200);
+  border-radius: 16px; padding: 32px 28px;
+  display: flex; flex-direction: column; position: relative;
+}
+.offre.populaire {
+  border-color: var(--stone-900);
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.06);
+}
+.badge-pop {
+  position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+  background: var(--stone-900); color: #fff;
+  padding: 4px 16px; border-radius: 9999px;
+  font-size: 12px; font-weight: 500; white-space: nowrap;
+}
+.nom-offre {
+  font-size: 13px; font-weight: 500; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--terracotta-500);
+}
+.montant-offre {
+  font-size: 44px; font-weight: 500; margin: 16px 0 4px;
+  letter-spacing: -0.04em; color: var(--stone-900); line-height: 1;
+}
+.montant-offre span {
+  font-size: 15px; font-weight: 400; color: var(--stone-400); letter-spacing: 0;
+}
+.desc-offre { color: var(--stone-600); font-size: 14px; margin-bottom: 24px; }
+.offre ul { flex: 1; margin-bottom: 28px; }
+.offre li {
+  padding: 8px 0; font-size: 14.5px; display: flex; gap: 10px;
+  color: var(--stone-700); font-weight: 400; align-items: flex-start;
+}
+.offre li::before { content: '✓'; color: var(--terracotta-500); font-weight: 600; flex-shrink: 0; }
+.btn-offre {
+  padding: 12px; border-radius: 9999px; font-size: 14.5px;
+  font-weight: 500; cursor: pointer; font-family: inherit;
+  border: 1px solid var(--stone-200); background: #fff;
+  color: var(--stone-900); width: 100%;
+  transition: all 0.15s;
+}
+.btn-offre:hover { border-color: var(--stone-300); background: var(--stone-50); }
+.offre.populaire .btn-offre {
+  background: var(--terracotta-500); color: #fff; border-color: var(--terracotta-500);
+}
+.offre.populaire .btn-offre:hover { background: var(--terracotta-600); border-color: var(--terracotta-600); }
+
+/* FAQ */
+.faq { max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+.q-faq {
+  background: var(--stone-50); border: 1px solid var(--stone-200);
+  border-radius: 12px; overflow: hidden;
+}
+.q-faq summary {
+  padding: 18px 22px; font-weight: 500; font-size: 15.5px;
+  cursor: pointer; list-style: none;
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 16px; color: var(--stone-900);
+}
+.q-faq summary::-webkit-details-marker { display: none; }
+.q-faq summary::after {
+  content: '+'; font-size: 22px; color: var(--stone-400);
+  font-weight: 300; flex-shrink: 0; transition: transform 0.15s;
+}
+.q-faq[open] summary::after { content: '−'; }
+.q-faq .rep {
+  padding: 0 22px 20px; color: var(--stone-600);
+  font-size: 15px; line-height: 1.7;
+}
+
+/* CTA finale */
+.cta-finale {
+  background: var(--stone-950); border-radius: 20px;
+  padding: 72px 32px; text-align: center;
+  position: relative; overflow: hidden;
+}
+.cta-finale::before {
+  content: ''; position: absolute; top: -140px; left: 50%;
+  transform: translateX(-50%);
+  width: 520px; height: 360px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(var(--accent-rgb),0.25), transparent 70%);
+  pointer-events: none;
+}
+.cta-finale > * { position: relative; }
+.cta-finale h2 {
+  font-family: 'Geist', sans-serif;
+  font-size: 28px; font-weight: 500; color: #fff;
+  margin-bottom: 14px; letter-spacing: -0.025em;
+  max-width: 36rem; margin-left: auto; margin-right: auto;
+  line-height: 1.2;
+}
+@media (min-width: 768px) { .cta-finale h2 { font-size: 2.25rem; } }
+.cta-finale p { color: var(--stone-400); font-size: 16px; margin-bottom: 32px; max-width: 32rem; margin-left: auto; margin-right: auto; }
+.btn-cta-blanc {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #fff; color: var(--stone-900);
+  padding: 12px 28px; border-radius: 9999px;
+  font-size: 15px; font-weight: 500;
+  transition: background 0.15s;
+}
+.btn-cta-blanc:hover { background: var(--stone-100); }
+
+/* ========== FOOTER (exact searchable bg #0A0A0A) ========== */
+footer.site-footer {
+  background: #0a0a0a; color: var(--stone-400);
+  padding: 72px 24px 36px;
+}
+.pied-inner { max-width: 72rem; margin: 0 auto; }
+.pied-haut {
+  display: grid; grid-template-columns: 1fr;
+  gap: 36px; margin-bottom: 48px;
+}
+@media (min-width: 768px) {
+  .pied-haut { grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 40px; }
+}
+.pied .marque {
+  font-size: 18px; font-weight: 600; color: #fff;
+  display: flex; align-items: center; gap: 9px;
+  margin-bottom: 14px; letter-spacing: -0.02em;
+}
+.pied .marque .rond {
+  width: 28px; height: 28px; border-radius: 9999px;
+  background: var(--terracotta-500);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 13px; color: #fff;
+}
+.pied .adresse { font-size: 14px; line-height: 1.75; color: var(--stone-500); max-width: 260px; }
+.badges-pied { display: flex; gap: 8px; margin-top: 20px; flex-wrap: wrap; }
+.badge-p {
+  background: #141414; border: 1px solid #262626;
+  border-radius: 8px; padding: 7px 12px;
+  font-size: 11.5px; color: var(--stone-300); font-weight: 500;
+}
+.pied h4 {
+  color: #fff; font-size: 13.5px; margin-bottom: 14px;
+  font-weight: 500;
+}
+.pied-liens a {
+  display: block; color: var(--stone-500); text-decoration: none;
+  font-size: 14px; padding: 5px 0; transition: color 0.1s;
+}
+.pied-liens a:hover { color: #fff; }
+.pied-milieu {
+  border-top: 1px solid #1f1f1f; padding-top: 32px;
+  margin-bottom: 28px; display: flex; justify-content: space-between;
+  gap: 28px; flex-wrap: wrap;
+}
+.mentions {
+  font-size: 12.5px; color: #525252; line-height: 1.75; max-width: 640px;
+}
+.reseaux { display: flex; gap: 12px; }
+.reseaux span {
+  width: 36px; height: 36px; border-radius: 9999px;
+  background: #141414; border: 1px solid #262626;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; cursor: pointer; transition: border-color 0.15s;
+}
+.reseaux span:hover { border-color: var(--terracotta-500); }
+.pied-bas {
+  border-top: 1px solid #1f1f1f; padding-top: 24px;
+  font-size: 12.5px; color: #525252;
+  display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+}
+.pied-bas a { color: var(--stone-500); text-decoration: none; margin-left: 18px; transition: color 0.1s; }
+.pied-bas a:first-child { margin-left: 0; }
+.pied-bas a:hover { color: #fff; }
+
+/* ========== CONNEXION ========== */
+.page-connexion {
+  min-height: calc(100vh - 42px);
+  display: grid; grid-template-columns: 1fr;
+}
+@media (min-width: 900px) { .page-connexion { grid-template-columns: 1fr 1fr; } }
+.visuel-connexion {
+  background: var(--stone-50); border-right: 1px solid var(--stone-200);
+  display: none; flex-direction: column; justify-content: center;
+  padding: 56px; position: relative; overflow: hidden;
+}
+@media (min-width: 900px) { .visuel-connexion { display: flex; } }
+.visuel-connexion::before {
+  content: ''; position: absolute; bottom: -140px; right: -140px;
+  width: 420px; height: 420px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(var(--accent-rgb),0.14), transparent 70%);
+  pointer-events: none;
+}
+.visuel-connexion > * { position: relative; }
+.visuel-connexion h2 {
+  font-family: 'Geist', sans-serif;
+  font-size: 32px; font-weight: 500; margin-bottom: 14px;
+  letter-spacing: -0.025em; line-height: 1.15; color: var(--stone-950);
+}
+.visuel-connexion h2 em { font-style: normal; color: var(--terracotta-500); }
+.visuel-connexion p { color: var(--stone-600); font-size: 15.5px; line-height: 1.7; max-width: 400px; }
+.stats-visuel { display: flex; gap: 40px; margin-top: 40px; flex-wrap: wrap; }
+.stat-visuel .n {
+  font-size: 32px; font-weight: 500; letter-spacing: -0.03em; color: var(--stone-900);
+}
+.stat-visuel .l { color: var(--stone-400); font-size: 13px; margin-top: 3px; font-weight: 400; }
+.form-connexion {
+  display: flex; align-items: center; justify-content: center;
+  padding: 48px 24px; background: var(--background);
+}
+.form-connexion .boite { width: 100%; max-width: 400px; }
+.form-connexion h1 {
+  font-family: 'Geist', sans-serif;
+  font-size: 28px; font-weight: 500; margin-bottom: 8px;
+  letter-spacing: -0.025em; color: var(--stone-950);
+}
+.form-connexion .sous { color: var(--stone-600); margin-bottom: 32px; font-size: 15px; }
+.champ { margin-bottom: 16px; }
+.champ label {
+  display: block; font-size: 13.5px; font-weight: 500;
+  margin-bottom: 7px; color: var(--stone-700);
+}
+.champ input {
+  width: 100%; padding: 12px 14px;
+  border: 1px solid var(--stone-200); border-radius: 10px;
+  font-size: 15px; font-family: inherit; background: #fff;
+  color: var(--stone-900); transition: border-color 0.15s, box-shadow 0.15s;
+}
+.champ input:focus {
+  outline: none; border-color: var(--terracotta-500);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb),0.15);
+}
+.btn-connexion {
+  width: 100%; padding: 13px;
+  background: var(--terracotta-500); color: #fff;
+  border: none; border-radius: 9999px;
+  font-size: 15px; font-weight: 500; cursor: pointer;
+  font-family: inherit; margin-top: 8px;
+  transition: background 0.15s;
+}
+.btn-connexion:hover { background: var(--terracotta-600); }
+.liens-form { text-align: center; margin-top: 22px; font-size: 14.5px; color: var(--stone-600); }
+.liens-form a { color: var(--terracotta-500); font-weight: 500; text-decoration: none; }
+.liens-form a:hover { text-decoration: underline; }
+.diviseur {
+  display: flex; align-items: center; gap: 14px; margin: 24px 0;
+  color: var(--stone-400); font-size: 13px; font-weight: 400;
+}
+.diviseur::before, .diviseur::after { content: ''; flex: 1; height: 1px; background: var(--stone-200); }
+.btn-google {
+  width: 100%; padding: 12px; background: #fff; color: var(--stone-900);
+  border: 1px solid var(--stone-200); border-radius: 9999px;
+  font-size: 14.5px; font-weight: 500; cursor: pointer; font-family: inherit;
+  transition: background 0.15s, border-color 0.15s;
+}
+.btn-google:hover { background: var(--stone-50); border-color: var(--stone-300); }
+
+/* ========== DASHBOARD ========== */
+.layout-app {
+  display: grid; grid-template-columns: 1fr;
+  min-height: calc(100vh - 42px); background: var(--background);
+}
+@media (min-width: 900px) { .layout-app { grid-template-columns: 240px 1fr; } }
+.sidebar-app {
+  background: var(--stone-50); border-right: 1px solid var(--stone-200);
+  padding: 24px 14px; display: none; flex-direction: column;
+}
+@media (min-width: 900px) { .sidebar-app { display: flex; } }
+.logo-sidebar {
+  font-size: 16px; font-weight: 600; padding: 0 10px 24px;
+  display: flex; align-items: center; gap: 8px;
+  letter-spacing: -0.02em; color: var(--stone-900);
+}
+.logo-sidebar .rond {
+  width: 26px; height: 26px; border-radius: 9999px;
+  background: var(--terracotta-500); color: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 12px;
+}
+.nav-sidebar { flex: 1; }
+.nav-sidebar .item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 12px; border-radius: 8px;
+  font-size: 14px; font-weight: 500; color: var(--stone-600);
+  margin-bottom: 2px; cursor: pointer; transition: all 0.1s;
+  width: 100%; text-align: left;
+}
+.nav-sidebar .item:hover { background: var(--stone-100); color: var(--stone-900); }
+.nav-sidebar .item.actif {
+  background: rgba(var(--accent-rgb),0.10);
+  color: var(--terracotta-600);
+}
+.nav-sidebar .sep { height: 1px; background: var(--stone-200); margin: 12px 6px; }
+.nav-sidebar .section-label {
+  font-size: 11px; font-weight: 500; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--stone-400);
+  padding: 8px 12px 6px;
+}
+.compte-bas {
+  border-top: 1px solid var(--stone-200); padding-top: 14px;
+  display: flex; align-items: center; gap: 10px; padding-left: 8px; padding-right: 8px;
+}
+.compte-bas .av {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--stone-800); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 500;
+}
+.compte-bas .info { flex: 1; min-width: 0; }
+.compte-bas .info .n { font-size: 13.5px; font-weight: 500; color: var(--stone-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.compte-bas .info .e { font-size: 12px; color: var(--stone-400); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.principale { padding: 28px 24px; max-width: 1100px; width: 100%; margin: 0 auto; }
+.entete-app {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 28px; flex-wrap: wrap; gap: 16px;
+}
+.entete-app h1 {
+  font-family: 'Geist', sans-serif;
+  font-size: 24px; font-weight: 500; letter-spacing: -0.025em;
+  color: var(--stone-950);
+}
+.entete-app .sous { color: var(--stone-500); font-size: 14.5px; margin-top: 4px; }
+.btn-primaire-app {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: var(--terracotta-500); color: #fff;
+  padding: 10px 20px; border-radius: 9999px;
+  font-size: 14px; font-weight: 500;
+  transition: background 0.15s;
+}
+.btn-primaire-app:hover { background: var(--terracotta-600); }
+.btn-secondaire-app {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: #fff; color: var(--stone-900);
+  border: 1px solid var(--stone-200);
+  padding: 10px 18px; border-radius: 9999px;
+  font-size: 14px; font-weight: 500;
+  transition: background 0.15s;
+}
+.btn-secondaire-app:hover { background: var(--stone-50); }
+
+.zone-televersement {
+  border: 1.5px dashed var(--stone-300); border-radius: 16px;
+  padding: 48px 24px; text-align: center; background: var(--stone-50);
+  transition: border-color 0.15s, background 0.15s; cursor: pointer;
+  margin-bottom: 28px;
+}
+.zone-televersement:hover, .zone-televersement.survol {
+  border-color: var(--terracotta-500); background: rgba(var(--accent-rgb),0.05);
+}
+.zone-televersement .ico { font-size: 32px; margin-bottom: 12px; }
+.zone-televersement .t { font-size: 16px; font-weight: 500; color: var(--stone-900); margin-bottom: 6px; }
+.zone-televersement .s { font-size: 14px; color: var(--stone-500); }
+.zone-televersement .s strong { color: var(--terracotta-500); font-weight: 500; cursor: pointer; }
+
+.kpis-app {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 14px; margin-bottom: 28px;
+}
+@media (min-width: 768px) { .kpis-app { grid-template-columns: repeat(4, 1fr); } }
+.kpi-app {
+  background: #fff; border: 1px solid var(--stone-200);
+  border-radius: 12px; padding: 18px;
+}
+.kpi-app .l {
+  font-size: 11px; color: var(--stone-400); font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.05em;
+}
+.kpi-app .v {
+  font-size: 28px; font-weight: 500; margin-top: 6px;
+  letter-spacing: -0.03em; color: var(--stone-900);
+}
+.kpi-app .d { font-size: 12.5px; color: var(--terracotta-500); margin-top: 4px; font-weight: 500; }
+
+.bloc-liste {
+  background: #fff; border: 1px solid var(--stone-200);
+  border-radius: 16px; overflow: hidden;
+}
+.bloc-liste .entete-bl {
+  padding: 18px 22px; border-bottom: 1px solid var(--stone-200);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.bloc-liste .entete-bl h2 {
+  font-size: 15.5px; font-weight: 500; color: var(--stone-900);
+}
+.ligne-fichier {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 22px; border-bottom: 1px solid var(--stone-100);
+  transition: background 0.1s;
+}
+.ligne-fichier:last-child { border-bottom: none; }
+.ligne-fichier:hover { background: var(--stone-50); }
+.ico-type {
+  width: 38px; height: 38px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; font-weight: 600; color: #fff; flex-shrink: 0;
+}
+.ico-type.xlsx { background: #15803d; }
+.ico-type.docx { background: #1d4ed8; }
+.ligne-fichier .meta { flex: 1; min-width: 0; }
+.ligne-fichier .meta .nom {
+  font-size: 14.5px; font-weight: 500; color: var(--stone-900);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ligne-fichier .meta .info { font-size: 12.5px; color: var(--stone-400); margin-top: 2px; }
+.statut {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 12px; border-radius: 9999px;
+  font-size: 12.5px; font-weight: 500; flex-shrink: 0;
+}
+.statut.termine { background: #dcfce7; color: #15803d; }
+.statut.encours { background: #fef3c7; color: #b45309; }
+.statut.erreur { background: #fee2e2; color: #b91c1c; }
+.statut .pt { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.statut.encours .pt { animation: pulse 1.2s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+.btn-action {
+  width: 32px; height: 32px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--stone-400); font-size: 15px;
+  transition: all 0.1s; flex-shrink: 0;
+}
+.btn-action:hover { background: var(--stone-100); color: var(--stone-900); }
+.btn-action.suppr:hover { background: #fee2e2; color: #b91c1c; }
+
+/* ========== RÉSULTATS ========== */
+.resultats-header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 28px; flex-wrap: wrap; gap: 16px;
+}
+.resultats-header h1 {
+  font-family: 'Geist', sans-serif;
+  font-size: 24px; font-weight: 500; letter-spacing: -0.025em;
+  color: var(--stone-950);
+}
+.resultats-header .sous { color: var(--stone-500); font-size: 14.5px; margin-top: 4px; }
+.onglets-resultats {
+  display: flex; gap: 4px; border-bottom: 1px solid var(--stone-200);
+  margin-bottom: 28px; overflow-x: auto;
+}
+.onglet-resultats {
+  padding: 10px 18px; font-size: 14.5px; font-weight: 500;
+  color: var(--stone-500); border-bottom: 2px solid transparent;
+  margin-bottom: -1px; transition: color 0.1s; white-space: nowrap;
+}
+.onglet-resultats:hover { color: var(--stone-900); }
+.onglet-resultats.actif { color: var(--terracotta-500); border-bottom-color: var(--terracotta-500); }
+.grille-resultats {
+  display: grid; grid-template-columns: 1fr; gap: 16px;
+}
+@media (min-width: 768px) { .grille-resultats { grid-template-columns: repeat(2, 1fr); } }
+.carte-resultat {
+  background: #fff; border: 1px solid var(--stone-200);
+  border-radius: 16px; padding: 24px;
+}
+.carte-resultat.large { grid-column: span 1; }
+@media (min-width: 768px) { .carte-resultat.large { grid-column: span 2; } }
+.carte-resultat h3 {
+  font-size: 15.5px; font-weight: 500; color: var(--stone-900);
+  margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
+}
+.carte-resultat h3 .badge {
+  font-size: 11px; font-weight: 500; padding: 2px 9px;
+  border-radius: 9999px; background: rgba(var(--accent-rgb),0.10);
+  color: var(--terracotta-600);
+}
+table-stats { width: 100%; border-collapse: collapse; font-size: 14px; }
+table-stats th {
+  text-align: left; font-weight: 500; color: var(--stone-400);
+  font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em;
+  padding: 8px 10px; border-bottom: 1px solid var(--stone-200);
+}
+table-stats td {
+  padding: 10px; color: var(--stone-700);
+  border-bottom: 1px solid var(--stone-100);
+}
+table-stats tr:last-child td { border-bottom: none; }
+table-stats td.val { font-family: 'Geist Mono', monospace; font-size: 13px; color: var(--stone-900); }
+.anomalie-item {
+  display: flex; gap: 12px; padding: 12px 0;
+  border-bottom: 1px solid var(--stone-100); align-items: flex-start;
+}
+.anomalie-item:last-child { border-bottom: none; }
+.anomalie-item .badge-type {
+  font-size: 11px; font-weight: 500; padding: 3px 10px;
+  border-radius: 9999px; white-space: nowrap; flex-shrink: 0;
+}
+.anomalie-item .badge-type.ab { background: #fee2e2; color: #b91c1c; }
+.anomalie-item .badge-type.ma { background: #fef3c7; color: #b45309; }
+.anomalie-item .txt { font-size: 14px; color: var(--stone-700); line-height: 1.55; }
+.anomalie-item .txt strong { color: var(--stone-900); font-weight: 500; }
+.reco-item {
+  display: flex; gap: 12px; padding: 12px 0;
+  border-bottom: 1px solid var(--stone-100); align-items: flex-start;
+}
+.reco-item:last-child { border-bottom: none; }
+.reco-item .n {
+  width: 24px; height: 24px; border-radius: 9999px;
+  background: rgba(var(--accent-rgb),0.12); color: var(--terracotta-600);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600; flex-shrink: 0;
+}
+.reco-item .txt { font-size: 14px; color: var(--stone-700); line-height: 1.55; }
+.insight-box {
+  background: var(--stone-950); border-radius: 12px;
+  padding: 22px; color: var(--stone-300);
+  font-size: 14.5px; line-height: 1.7;
+}
+.insight-box strong { color: #fff; font-weight: 500; }
+.insight-box .tag-ia {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11.5px; font-weight: 500; padding: 3px 10px;
+  border-radius: 9999px; background: rgba(var(--accent-rgb),0.20);
+  color: var(--terracotta-300); margin-bottom: 12px;
+}
+.graphique-reel {
+  height: 200px; display: flex; align-items: flex-end;
+  gap: 8px; padding-top: 10px;
+}
+.graphique-reel .barre {
+  flex: 1; background: var(--terracotta-500); border-radius: 4px 4px 0 0;
+  min-height: 4px; position: relative; opacity: 0.85;
+  transition: opacity 0.15s;
+}
+.graphique-reel .barre:hover { opacity: 1; }
+.graphique-reel .barre.anom { background: #dc2626; }
+.legende-graph {
+  display: flex; gap: 16px; margin-top: 12px;
+  font-size: 12.5px; color: var(--stone-500);
+}
+.legende-graph span { display: flex; align-items: center; gap: 6px; }
+.legende-graph .c { width: 10px; height: 10px; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- ========== BARRE PROTOTYPE ========== -->
+<div class="barre-proto">
+  <span class="titre-proto">Prototype</span>
+  <button class="nav actif" data-vue="landing">Landing</button>
+  <button class="nav" data-vue="connexion">Connexion</button>
+  <button class="nav" data-vue="dashboard">Dashboard</button>
+  <button class="nav" data-vue="resultats">Résultats</button>
+  <span class="sep-proto"></span>
+  <span class="titre-proto">Couleur</span>
+  <div class="pastilles">
+    <span class="pastille-theme actif" data-theme="terracotta" style="background:#c15f3c" title="Terracotta (rechercheable)"></span>
+    <span class="pastille-theme" data-theme="violet" style="background:#7c3aed" title="Violet"></span>
+    <span class="pastille-theme" data-theme="bleu" style="background:#2563eb" title="Bleu"></span>
+    <span class="pastille-theme" data-theme="vert" style="background:#16a34a" title="Vert"></span>
+    <span class="pastille-theme" data-theme="orange" style="background:#ea580c" title="Orange"></span>
+    <span class="pastille-theme" data-theme="rose" style="background:#db2777" title="Rose"></span>
+    <span class="pastille-theme" data-theme="turquoise" style="background:#0d9488" title="Turquoise"></span>
+  </div>
+</div>
+
+<!-- ========== VUE : LANDING ========== -->
+<div class="vue actif" id="vue-landing">
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="#" class="logo-marque">
+        <span class="rond-logo">G</span>
+        GestAnalyse
+      </a>
+      <nav>
+        <ul class="liens-nav">
+          <li><a href="#produit">Produit</a></li>
+          <li><a href="#fonctionnement">Fonctionnement</a></li>
+          <li><a href="#securite">Sécurité</a></li>
+          <li><a href="#api">API</a></li>
+          <li><a href="#tarifs">Tarifs</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </nav>
+      <div class="nav-droite">
+        <span class="drapeau" title="Burkina Faso"></span>
+        <a href="#" class="btn-connex-nav" data-vue-lien="connexion">Connexion</a>
+        <a href="#" class="btn-cta-nav">Commencer gratuitement</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-inner">
+      <h1>
+        Analyse de données Excel &amp; Word — et les
+        <span class="accent">actions pour décider plus vite</span>
+      </h1>
+            <p class="sous-hero">
+        Transformez vos fichiers en insights actionnables : statistiques,
+        anomalies, tendances et recommandations.
+      </p>
+      <div class="pills-formats">
+        <span class="pill-inline"><span class="ico-pill">📊</span>.xlsx · .xls · .csv</span>
+        <span class="pill-inline"><span class="ico-pill">📄</span>.docx · .doc</span>
+        <span class="pill-inline"><span class="ico-pill">⚡</span>+ API</span>
+      </div>
+      <div class="boutons-hero">
+        <a href="#" class="btn-hero-terracotta">
+          Commencer gratuitement
+          <span class="rond-fleche">→</span>
+        </a>
+        <a href="#" class="btn-hero-neutre">Réserver une démo</a>
+      </div>
+
+      <!-- Mockup produit -->
+      <div class="encadrement-mockup">
+        <div class="barre-nav-mock">
+          <span class="pt-mock r"></span>
+          <span class="pt-mock j"></span>
+          <span class="pt-mock v"></span>
+          <span class="url-mock">app.gestanalyse.fr/tableau-de-bord</span>
+        </div>
+        <div class="corps-mock">
+          <aside class="side-mock">
+            <div class="logo-mock"><span class="rond">G</span> GestAnalyse</div>
+                          <div class="nav-mock">
+              <div class="actif">📊 Tableau de bord</div>
+              <div>📁 Fichiers</div>
+              <div>📈 Résultats</div>
+              <div>💡 Insights IA</div>
+              <div class="separateur-mock"></div>
+              <div>⚙️ Paramètres</div>
+              <div>👥 Équipe</div>
+            </div>
+            <div class="plan-mock">
+              <div class="t">Plan Pro</div>
+              <div class="i">Insights IA activés · 100 Mo / fichier</div>
+              <div class="jauge-mock"><div></div></div>
+            </div>
+          </aside>
+          <div class="main-mock">
+            <div class="entete-mock">
+              <div>
+                <h3>Tableau de bord</h3>
+                <div class="sous-mock">Vue d'ensemble de vos analyses</div>
+              </div>
+              <div class="boutons-entete">
+                <button class="btn-import-mock">+ Importer</button>
+                <div class="avatar-mock">A</div>
+              </div>
+            </div>
+            <div class="kpis-mock">
+              <div class="kpi-mock"><div class="l">Fichiers</div><div class="v">42</div></div>
+              <div class="kpi-mock"><div class="l">Jobs</div><div class="v a">128</div></div>
+              <div class="kpi-mock"><div class="l">Anomalies</div><div class="v o">7</div></div>
+              <div class="kpi-mock"><div class="l">Insights</div><div class="v">56</div></div>
+            </div>
+            <div class="graph-mock">
+              <div class="bar-mock" style="height:45%"></div>
+              <div class="bar-mock" style="height:70%"></div>
+              <div class="bar-mock" style="height:55%"></div>
+              <div class="bar-mock" style="height:85%"></div>
+              <div class="bar-mock dim" style="height:40%"></div>
+              <div class="bar-mock" style="height:95%"></div>
+              <div class="bar-mock" style="height:60%"></div>
+              <div class="bar-mock" style="height:75%"></div>
+              <div class="bar-mock dim" style="height:50%"></div>
+              <div class="bar-mock" style="height:80%"></div>
+              <div class="bar-mock" style="height:65%"></div>
+              <div class="bar-mock" style="height:90%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Logos / formats -->
+  <div class="bande-logos">
+    <div class="logos-label">Formats pris en charge</div>
+    <div class="logos-inner">
+      <span>.xlsx</span>
+      <span>.xls</span>
+      <span>.csv</span>
+      <span>.docx</span>
+      <span>.doc</span>
+      <span>API REST</span>
+    </div>
+  </div>
+
+  <!-- Features bento — calé sur le module d'analyse -->
+  <section class="section" id="produit">
+    <div class="section-titre">
+      <span class="sur-titre">Produit</span>
+      <h2>Un import. Toute la chaîne d'analyse.</h2>
+      <p>Excel pour les données tabulaires, Word pour les documents : inspection, stats, anomalies, tendances et recommandations — sans écrire une formule.</p>
+    </div>
+    <div class="bento">
+      <div class="b-carte large">
+        <div class="b-ico">📊</div>
+        <h3>Analyse Excel — de la colonne à la décision</h3>
+        <p>Détection automatique des types (numérique, catégoriel, date), stats descriptives par colonne, croisements et corrélations.</p>
+        <ul class="liste-points">
+          <li>Moyenne, médiane, écart-type, min/max, quartiles, valeurs manquantes</li>
+          <li>Anomalies par méthode IQR / z-score</li>
+          <li>Tendances si une colonne date existe (croissance, saisonnalité)</li>
+          <li>Top N, moyennes par groupe, corrélations entre colonnes</li>
+        </ul>
+      </div>
+      <div class="b-carte fonce">
+        <div class="b-stat-chiffre">asynchrone</div>
+        <h3>Pipeline qui ne bloque jamais</h3>
+        <p>Upload → API → file d'attente → workers. L'API répond immédiatement ; le traitement lourd tourne en arrière-plan avec retry (3 max) et timeout.</p>
+      </div>
+      <div class="b-carte">
+        <div class="b-ico">🚨</div>
+        <h3>Anomalies &amp; données manquantes</h3>
+        <p>Valeurs aberrantes (IQR) et cellules vides signalées automatiquement, avec la ligne et la colonne concernées.</p>
+      </div>
+      <div class="b-carte">
+        <div class="b-ico">📈</div>
+        <h3>Tendances temporelles</h3>
+        <p>Si une colonne date est détectée : croissance/décroissance, saisonnalité simple et points de retournement.</p>
+      </div>
+      <div class="b-carte">
+        <div class="b-ico">💡</div>
+        <h3>Recommandations &amp; insights IA</h3>
+        <p>Règles locales d'abord, puis insights en langage naturel sur le plan Pro (étape optionnelle du pipeline, avec fallback si l'IA est en échec).</p>
+      </div>
+      <div class="b-carte large">
+        <div class="b-ico">📄</div>
+        <h3>Analyse Word — documents exploitables</h3>
+        <p>Extraction paragraphes/tableaux/listes, résumé automatique, mots-clés et entités (dates, montants, noms) pour vos rapports et comptes rendus.</p>
+        <ul class="liste-points">
+          <li>Résumé exécutif en quelques secondes</li>
+          <li>Fréquences et termes importants</li>
+          <li>Entités détectées : dates, chiffres, noms cités</li>
+          <li>Points d'action et risques quand ils sont détectables</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Étapes — flux exact de l'archi -->
+  <div class="bloc-gris">
+    <section class="section" id="fonctionnement">
+      <div class="section-titre">
+        <span class="sur-titre">Comment ça marche</span>
+        <h2>De l'upload au rapport, sans friction</h2>
+        <p>Le même flux que dans l'architecture : validation stricte, traitement découplé, résultats prêts en quelques secondes.</p>
+      </div>
+      <div class="etapes">
+        <div class="etape">
+          <div class="num-etape">1</div>
+          <h3>Importez votre fichier</h3>
+          <p>Glissez-déposez un .xlsx, .xls, .csv, .docx ou .doc. Vérification du vrai format (magic bytes), taille max selon votre plan, quotas contrôlés à l'upload.</p>
+        </div>
+        <div class="etape">
+          <div class="num-etape">2</div>
+          <h3>L'analyse tourne en arrière-plan</h3>
+          <p>L'API enfile le job immédiatement. Un worker parse (pandas / python-docx), calcule stats, anomalies, tendances et résumé — retry limité, jobs idempotents.</p>
+        </div>
+        <div class="etape">
+          <div class="num-etape">3</div>
+          <h3>Consultez &amp; agissez</h3>
+          <p>Polling automatique jusqu'au statut « terminé ». Ouvrez le rapport : stats, anomalies, tendances, recommandations et insights IA — export ou partage équipe.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Sécurité / RGPD -->
+  <section class="section" id="securite">
+    <div class="section-titre">
+      <span class="sur-titre">Sécurité &amp; conformité</span>
+      <h2>Vos fichiers restent les vôtres</h2>
+      <p>Conçu pour le RGPD dès le MVP : isolation par organisation, chiffrement, suppression à la demande.</p>
+    </div>
+    <div class="bento">
+      <div class="b-carte">
+        <div class="b-ico">🔒</div>
+        <h3>Validation &amp; chiffrement</h3>
+        <p>Type vérifié par magic bytes (pas seulement l'extension), HTTPS partout, fichiers chiffrés au repos, secrets hors du code.</p>
+      </div>
+      <div class="b-carte">
+        <div class="b-ico">🏢</div>
+        <h3>Isolation par tenant</h3>
+        <p>Chaque requête est scopée par organisation : aucun accès croisé entre vos données et celles d'un autre client.</p>
+      </div>
+      <div class="b-carte">
+        <div class="b-ico">🗑</div>
+        <h3>RGPD by design</h3>
+        <p>Consentement à l'upload, droit à la suppression (fichier + résultats), rétention définie, hébergement EU privilégié.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- API -->
+  <div class="bloc-gris">
+    <section class="section" id="api">
+      <div class="section-titre">
+        <span class="sur-titre">Développeurs</span>
+        <h2>API REST pour brancher vos outils</h2>
+        <p>Auth JWT, upload multipart, polling de statut, résultats JSON — le même contrat que le frontend.</p>
+      </div>
+      <div class="bento">
+        <div class="b-carte large">
+          <div class="b-ico">⚡</div>
+          <h3>Endpoints principaux</h3>
+          <p>Créez un compte, uploadez, suivez le job, récupérez le JSON de résultat.</p>
+          <ul class="liste-points">
+            <li><code>POST /auth/inscription</code> · <code>POST /auth/connexion</code></li>
+            <li><code>POST /fichiers</code> — upload → job créé</li>
+            <li><code>GET /fichiers/{id}/statut</code> — polling</li>
+            <li><code>GET /fichiers/{id}/resultat</code> — JSON complet</li>
+            <li><code>DELETE /fichiers/{id}</code> — purge RGPD</li>
+          </ul>
+        </div>
+        <div class="b-carte fonce">
+          <div class="b-stat-chiffre">JSON</div>
+          <h3>Format de sortie stable</h3>
+          <p>resume_statistique, anomalies[], tendances[], recommandations[], insights_ia — versionnable et facile à consommer.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Témoignages -->
+  <section class="section">
+    <div class="section-titre">
+      <span class="sur-titre">Témoignages</span>
+      <h2>Ce qu'en disent nos utilisateurs</h2>
+      <p>Des équipes data, finance et support qui gagnent des heures chaque semaine.</p>
+    </div>
+    <div class="temoignages">
+      <div class="temoignage">
+        <div class="etoiles">★★★★★</div>
+        <p>« On a remplacé trois heures de nettoyage Excel par un drag &amp; drop. Les anomalies IQR remontent toutes seules, avec la ligne exacte. »</p>
+        <div class="auteur-t">
+          <div class="avatar-t">SM</div>
+          <div><div class="nom">Sophie Martin</div><div class="role">Data Analyst, NovaRetail</div></div>
+        </div>
+      </div>
+      <div class="temoignage">
+        <div class="etoiles">★★★★★</div>
+        <p>« Le résumé automatique de nos comptes rendus Word et l'extraction des montants nous font gagner une heure par réunion. »</p>
+        <div class="auteur-t">
+          <div class="avatar-t">TL</div>
+          <div><div class="nom">Thomas Leroy</div><div class="role">Directeur financier, Groupe Alcor</div></div>
+        </div>
+      </div>
+      <div class="temoignage">
+        <div class="etoiles">★★★★★</div>
+        <p>« L'API et le polling s'intègrent en une après-midi. On a branché GestAnalyse sur notre entrepôt de données sans casser le existant. »</p>
+        <div class="auteur-t">
+          <div class="avatar-t">NB</div>
+          <div><div class="nom">Nadia Benali</div><div class="role">Growth Lead, PulseLab</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tarifs — quotas exacts de l'archi -->
+  <div class="bloc-gris">
+    <section class="section" id="tarifs">
+      <div class="section-titre">
+        <span class="sur-titre">Tarifs</span>
+        <h2>Simple, transparent, sans surprise</h2>
+        <p>Quotas vérifiés à l'upload et avant chaque appel IA. Passez de Gratuit à Pro quand vous en avez besoin.</p>
+      </div>
+      <div class="prix">
+        <div class="offre">
+          <div class="nom-offre">Gratuit</div>
+          <div class="montant-offre">0€ <span>/ mois</span></div>
+          <div class="desc-offre">Pour tester l'analyse de base</div>
+          <ul>
+            <li>5 fichiers / mois</li>
+            <li>Jusqu'à 10 Mo / fichier</li>
+            <li>Analyse simple (stats, anomalies, tendances)</li>
+            <li>Colonnes / lignes limitées</li>
+            <li>Pas d'insights IA</li>
+          </ul>
+          <button class="btn-offre">Commencer</button>
+        </div>
+        <div class="offre populaire">
+          <div class="badge-pop">Le plus choisi</div>
+          <div class="nom-offre">Pro</div>
+          <div class="montant-offre">19€ <span>/ mois</span></div>
+          <div class="desc-offre">Pour les équipes qui analysent chaque jour</div>
+          <ul>
+            <li>Fichiers illimités</li>
+            <li>Jusqu'à 100 Mo / fichier</li>
+            <li>Analyse simple + Word complète</li>
+            <li>Insights IA &amp; recommandations</li>
+            <li>Colonnes / lignes sans limite</li>
+            <li>Quota IA renouvelé mensuellement</li>
+          </ul>
+          <button class="btn-offre">Essayer 14 jours</button>
+        </div>
+        <div class="offre">
+          <div class="nom-offre">Entreprise</div>
+          <div class="montant-offre">Sur devis</div>
+          <div class="desc-offre">Volume, sécurité et support dédié</div>
+          <ul>
+            <li>Tout le plan Pro</li>
+            <li>SSO / SAML</li>
+            <li>Journal d'audit</li>
+            <li>SLA 99,9%</li>
+            <li>Hébergement EU dédié</li>
+            <li>Account manager dédié</li>
+          </ul>
+          <button class="btn-offre">Contacter les ventes</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- FAQ — calée sur l'archi -->
+  <section class="section" id="faq">
+    <div class="section-titre">
+      <span class="sur-titre">FAQ</span>
+      <h2>Questions fréquentes</h2>
+      <p>Tout ce que vous devez savoir avant de commencer.</p>
+    </div>
+    <div class="faq">
+      <details class="q-faq" open>
+        <summary>Quels formats de fichiers sont pris en charge ?</summary>
+        <div class="rep">Excel (.xlsx, .xls, .csv) et Word (.docx, .doc). Le type est vérifié par magic bytes, pas seulement par l'extension. Chaque feuille d'un classeur est analysée séparément.</div>
+      </details>
+      <details class="q-faq">
+        <summary>Combien de temps dure une analyse ?</summary>
+        <div class="rep">L'API répond immédiatement après l'upload. Le traitement tourne en arrière-plan (file d'attente + workers) : la plupart des fichiers sont prêts en quelques secondes. Le client fait un polling toutes les 2–3 secondes jusqu'au statut « terminé ».</div>
+      </details>
+      <details class="q-faq">
+        <summary>Comment fonctionnent les insights IA ?</summary>
+        <div class="rep">C'est une étape optionnelle du pipeline, activée sur le plan Pro. On envoie un résumé structuré des stats (pas le fichier entier) au modèle ; en cas d'échec ou de timeout, on retombe sur l'analyse simple — le job reste terminé. La version du modèle est stockée pour traçabilité.</div>
+      </details>
+      <details class="q-faq">
+        <summary>Mes données sont-elles stockées ? Combien de temps ?</summary>
+        <div class="rep">Les fichiers sont chiffrés au repos et isolés par organisation. Vous pouvez les supprimer à tout moment (fichier + résultats) via l'API ou l'interface. Une rétention automatique purge les fichiers inactifs après la durée contractuelle.</div>
+      </details>
+      <details class="q-faq">
+        <summary>Y a-t-il une limite de taille de fichier ?</summary>
+        <div class="rep">Plan Gratuit : 10 Mo max par fichier, 5 fichiers / mois. Plan Pro : 100 Mo max, fichiers illimités. Les quotas sont vérifiés à l'upload (rejet immédiat) et les quotas IA avant chaque appel modèle.</div>
+      </details>
+      <details class="q-faq">
+        <summary>Puis-je intégrer GestAnalyse à mes outils ?</summary>
+        <div class="rep">Oui. L'API REST expose l'inscription, la connexion JWT, l'upload multipart, le polling de statut et la récupération JSON des résultats — le même contrat que le frontend. Un delete permet la purge RGPD depuis vos systèmes.</div>
+      </details>
+    </div>
+  </section>
+
+  <!-- CTA finale -->
+  <section class="section" style="padding-top:0;">
+    <div class="cta-finale">
+      <h2>Prêt à transformer vos fichiers en décisions ?</h2>
+      <p>5 fichiers offerts chaque mois. Aucune carte bancaire requise pour commencer.</p>
+      <a href="#" class="btn-cta-blanc">Commencer gratuitement →</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="pied-inner">
+      <div class="pied-haut">
+        <div class="pied">
+          <div class="marque"><span class="rond">G</span> GestAnalyse</div>
+          <div class="adresse">
+            Plateforme d'analyse de données Excel &amp; Word.<br>
+            Transformez vos fichiers en décisions.
+          </div>
+        </div>
+      </div>
+      <div class="pied-bas">
+        <div>© 2026 GestAnalyse. Tous droits réservés.</div>
+        <div>Français (BF)</div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ========== VUE : CONNEXION ========== -->
+<div class="vue" id="vue-connexion">
+  <div class="page-connexion">
+    <div class="visuel-connexion">
+      <h2>Analysez vos données.<br><em>Décidez plus vite.</em></h2>
+      <p>Rejoignez plus de 12 000 utilisateurs qui transforment leurs fichiers Excel et Word en décisions éclairées avec GestAnalyse.</p>
+      <div class="stats-visuel">
+        <div class="stat-visuel"><div class="n">12k+</div><div class="l">Utilisateurs actifs</div></div>
+        <div class="stat-visuel"><div class="n">2,4M</div><div class="l">Fichiers analysés</div></div>
+        <div class="stat-visuel"><div class="n">99,2%</div><div class="l">Précision anomalies</div></div>
+      </div>
+    </div>
+    <div class="form-connexion">
+      <div class="boite">
+        <h1>Bon retour parmi nous</h1>
+        <p class="sous">Connectez-vous pour accéder à vos analyses.</p>
+        <div class="champ">
+          <label for="email-conn">Adresse e-mail</label>
+          <input type="email" id="email-conn" placeholder="vous@entreprise.fr" value="test@test.com">
+        </div>
+        <div class="champ">
+          <label for="mdp-conn">Mot de passe</label>
+          <input type="password" id="mdp-conn" placeholder="••••••••" value="test1234">
+        </div>
+        <button class="btn-connexion">Se connecter</button>
+        <p class="liens-form">Pas encore de compte ? <a href="#">Commencer gratuitement</a></p>
+        <div class="diviseur">ou continuer avec</div>
+        <button class="btn-google">G&nbsp;&nbsp;Google</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== VUE : DASHBOARD ========== -->
+<div class="vue" id="vue-dashboard">
+  <div class="layout-app">
+    <aside class="sidebar-app">
+      <div class="logo-sidebar"><span class="rond">G</span> GestAnalyse</div>
+      <nav class="nav-sidebar">
+        <button class="item actif">📊 Tableau de bord</button>
+        <button class="item">📁 Fichiers</button>
+        <button class="item">📈 Résultats</button>
+        <button class="item">💡 Insights IA</button>
+        <div class="sep"></div>
+        <div class="section-label">Organisation</div>
+        <button class="item">👥 Équipe</button>
+        <button class="item">📊 Abonnement</button>
+        <button class="item">⚙️ Paramètres</button>
+      </nav>
+      <div class="compte-bas">
+        <div class="av">A</div>
+        <div class="info">
+          <div class="n">Admin</div>
+          <div class="e">admin@gestanalyse.fr</div>
+        </div>
+      </div>
+    </aside>
+    <main class="principale">
+      <div class="entete-app">
+        <div>
+          <h1>Tableau de bord</h1>
+          <div class="sous">Bonjour Admin — voici l'activité de votre organisation.</div>
+        </div>
+        <button class="btn-primaire-app">+ Importer un fichier</button>
+      </div>
+
+      <div class="kpis-app">
+        <div class="kpi-app"><div class="l">Fichiers</div><div class="v">42</div><div class="d">+8 ce mois</div></div>
+        <div class="kpi-app"><div class="l">Jobs terminés</div><div class="v">128</div><div class="d">+24 ce mois</div></div>
+        <div class="kpi-app"><div class="l">Anomalies</div><div class="v">7</div><div class="d">à vérifier</div></div>
+        <div class="kpi-app"><div class="l">Insights IA</div><div class="v">56</div><div class="d">quota Pro</div></div>
+      </div>
+
+      <div class="zone-televersement" id="zone-televersement">
+        <div class="ico">⬆️</div>
+        <div class="t">Glissez-déposez vos fichiers ici</div>
+        <div class="s">Excel (.xlsx, .xls, .csv) ou Word (.docx, .doc) — validation magic bytes · quotas selon votre plan · ou <strong>parcourir</strong></div>
+      </div>
+
+      <div class="bloc-liste">
+        <div class="entete-bl">
+          <h2>Fichiers récents</h2>
+          <button class="btn-secondaire-app">Voir tout</button>
+        </div>
+        <div class="ligne-fichier">
+          <div class="ico-type xlsx">X</div>
+          <div class="meta">
+            <div class="nom">rapport_ventes_2025.xlsx</div>
+            <div class="info">2,4 Mo · importé il y a 2 min · 3 feuilles</div>
+          </div>
+          <span class="statut termine"><span class="pt"></span> Terminé</span>
+          <button class="btn-action" title="Voir">→</button>
+          <button class="btn-action suppr" title="Supprimer">🗑</button>
+        </div>
+        <div class="ligne-fichier">
+          <div class="ico-type docx">W</div>
+          <div class="meta">
+            <div class="nom">compte_rendu_q3.docx</div>
+            <div class="info">890 Ko · importé il y a 1 h · 12 pages</div>
+          </div>
+          <span class="statut termine"><span class="pt"></span> Terminé</span>
+          <button class="btn-action" title="Voir">→</button>
+          <button class="btn-action suppr" title="Supprimer">🗑</button>
+        </div>
+        <div class="ligne-fichier">
+          <div class="ico-type xlsx">X</div>
+          <div class="meta">
+            <div class="nom">budget_marketing_2026.xlsx</div>
+            <div class="info">1,1 Mo · importé il y a 3 h · 1 feuille</div>
+          </div>
+          <span class="statut encours"><span class="pt"></span> En cours</span>
+          <button class="btn-action" title="Voir">→</button>
+          <button class="btn-action suppr" title="Supprimer">🗑</button>
+        </div>
+        <div class="ligne-fichier">
+          <div class="ico-type xlsx">X</div>
+          <div class="meta">
+            <div class="nom">inventaire_stock.xlsx</div>
+            <div class="info">5,6 Mo · importé hier · 5 feuilles</div>
+          </div>
+          <span class="statut termine"><span class="pt"></span> Terminé</span>
+          <button class="btn-action" title="Voir">→</button>
+          <button class="btn-action suppr" title="Supprimer">🗑</button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ========== VUE : RÉSULTATS ========== -->
+<div class="vue" id="vue-resultats">
+  <div class="layout-app">
+    <aside class="sidebar-app">
+      <div class="logo-sidebar"><span class="rond">G</span> GestAnalyse</div>
+      <nav class="nav-sidebar">
+        <button class="item">📊 Tableau de bord</button>
+        <button class="item actif">📁 Fichiers</button>
+        <button class="item">📈 Résultats</button>
+        <button class="item">💡 Insights IA</button>
+        <div class="sep"></div>
+        <div class="section-label">Organisation</div>
+        <button class="item">👥 Équipe</button>
+        <button class="item">📊 Abonnement</button>
+        <button class="item">⚙️ Paramètres</button>
+      </nav>
+      <div class="compte-bas">
+        <div class="av">A</div>
+        <div class="info">
+          <div class="n">Admin</div>
+          <div class="e">admin@gestanalyse.fr</div>
+        </div>
+      </div>
+    </aside>
+    <main class="principale">
+      <div class="resultats-header">
+        <div>
+          <h1>rapport_ventes_2025.xlsx</h1>
+          <div class="sous">Job terminé · 3 feuilles · 1 250 lignes · modèle: analyse_locale · il y a 2 min</div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn-secondaire-app">⬇ Exporter</button>
+          <button class="btn-primaire-app">Voir insights_ia</button>
+        </div>
+      </div>
+
+      <div class="onglets-resultats">
+        <button class="onglet-resultats actif">resume_statistique</button>
+        <button class="onglet-resultats">anomalies</button>
+        <button class="onglet-resultats">tendances</button>
+        <button class="onglet-resultats">recommandations</button>
+        <button class="onglet-resultats">insights_ia</button>
+      </div>
+
+      <div class="grille-resultats">
+        <div class="carte-resultat">
+          <h3>resume_statistique <span class="badge">Feuille Ventes</span></h3>
+          <table class="stats">
+            <thead>
+              <tr><th>Colonne</th><th>Moyenne</th><th>Médiane</th><th>Éc. type</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Chiffre d'affaires</td><td class="val">48 230 €</td><td class="val">46 100 €</td><td class="val">12 450</td></tr>
+              <tr><td>Quantité</td><td class="val">342</td><td class="val">310</td><td class="val">89</td></tr>
+              <tr><td>Prix unitaire</td><td class="val">141,20 €</td><td class="val">129,00 €</td><td class="val">34,10</td></tr>
+              <tr><td>Marge</td><td class="val">22,4%</td><td class="val">21,8%</td><td class="val">4,2</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="carte-resultat">
+          <h3>anomalies <span class="badge">2+</span></h3>
+          <div class="anomalie-item">
+            <span class="badge-type ab">Valeur aberrante</span>
+            <div class="txt"><strong>2 500 €</strong> en Août — écart de +180% par rapport à la médiane (IQR).</div>
+          </div>
+          <div class="anomalie-item">
+            <span class="badge-type ma">Donnée manquante</span>
+            <div class="txt"><strong>Client</strong> non renseigné en Avril (ligne 47).</div>
+          </div>
+          <div class="anomalie-item">
+            <span class="badge-type ab">Valeur aberrante</span>
+            <div class="txt"><strong>Quantité 999</strong> en Novembre — probable erreur de saisie.</div>
+          </div>
+        </div>
+
+        <div class="carte-resultat large">
+          <h3>resume_statistique — tendance CA <span class="badge">2025</span></h3>
+          <div class="graphique-reel">
+            <div class="barre" style="height:42%" title="Jan: 38k€"></div>
+            <div class="barre" style="height:48%" title="Fév: 42k€"></div>
+            <div class="barre" style="height:55%" title="Mar: 48k€"></div>
+            <div class="barre" style="height:51%" title="Avr: 45k€"></div>
+            <div class="barre" style="height:60%" title="Mai: 52k€"></div>
+            <div class="barre" style="height:64%" title="Juin: 56k€"></div>
+            <div class="barre" style="height:58%" title="Juil: 51k€"></div>
+            <div class="barre anom" style="height:95%" title="Août: 2500 anomaly CA"></div>
+            <div class="barre" style="height:62%" title="Sep: 54k€"></div>
+            <div class="barre" style="height:70%" title="Oct: 61k€"></div>
+            <div class="barre" style="height:74%" title="Nov: 65k€"></div>
+            <div class="barre" style="height:88%" title="Déc: 78k€"></div>
+          </div>
+          <div class="legende-graph">
+            <span><span class="c" style="background:#c15f3c"></span> CA mensuel</span>
+            <span><span class="c" style="background:#dc2626"></span> Anomalie (IQR)</span>
+          </div>
+        </div>
+
+        <div class="carte-resultat">
+          <h3>recommandations <span class="badge">4</span></h3>
+          <div class="reco-item">
+            <span class="n">1</span>
+            <div class="txt">Vérifier la saisie d'Août (2 500 €) — possible erreur ou promotion exceptionnelle.</div>
+          </div>
+          <div class="reco-item">
+            <span class="n">2</span>
+            <div class="txt">Compléter le champ Client manquant en Avril pour fiabiliser l'analyse par segment.</div>
+          </div>
+          <div class="reco-item">
+            <span class="n">3</span>
+            <div class="txt">Tendance positive +18% sur l'année — envisager d'augmenter le stock Q4.</div>
+          </div>
+          <div class="reco-item">
+            <span class="n">4</span>
+            <div class="txt">Prix unitaire stable : surveiller les marges si les coûts d'achat augmentent.</div>
+          </div>
+        </div>
+
+        <div class="carte-resultat">
+          <h3>insights_ia</h3>
+          <div class="insight-box">
+            <span class="tag-ia">✨ analyse_locale · version du modèle stockée</span>
+            <strong>Résumé exécutif :</strong> Le CA 2025 progresse régulièrement avec un pic en décembre (78k€). Une anomalie majeure en août (2 500 € vs médiane 46 100 €) biaise la moyenne — sans elle : 44 800 €. Marge moyenne 22,4% saine. Priorité : valider la donnée d'août et sécuriser l'approvisionnement Q4.
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+// Commutation de vues
+const boutons = document.querySelectorAll('.barre-proto button.nav');
+const vues = document.querySelectorAll('.vue');
+boutons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    boutons.forEach(b => b.classList.remove('actif'));
+    vues.forEach(v => v.classList.remove('actif'));
+    btn.classList.add('actif');
+    document.getElementById('vue-' + btn.dataset.vue).classList.add('actif');
+    window.scrollTo(0, 0);
+  });
+});
+// Liens "Connexion" dans la landing
+document.querySelectorAll('[data-vue-lien]').forEach(el => {
+  el.addEventListener('click', e => {
+    e.preventDefault();
+    const cible = document.querySelector('.barre-proto button[data-vue="' + el.dataset.vueLien + '"]');
+    if (cible) cible.click();
+  });
+});
+// Pastilles de thème
+const pastilles = document.querySelectorAll('.pastille-theme');
+pastilles.forEach(p => {
+  p.addEventListener('click', () => {
+    pastilles.forEach(x => x.classList.remove('actif'));
+    p.classList.add('actif');
+    document.documentElement.setAttribute('data-theme', p.dataset.theme);
+  });
+});
+// Zone televersement demo
+const zone = document.getElementById('zone-televersement');
+if (zone) {
+  ['dragenter','dragover'].forEach(ev => zone.addEventListener(ev, e => {
+    e.preventDefault(); zone.classList.add('survol');
+  }));
+  ['dragleave','drop'].forEach(ev => zone.addEventListener(ev, e => {
+    e.preventDefault(); zone.classList.remove('survol');
+  }));
+}
+</script>
+</body>
+</html>
