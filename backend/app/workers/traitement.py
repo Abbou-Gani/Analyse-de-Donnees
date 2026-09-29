@@ -6,7 +6,8 @@ from app.models.fichier import Fichier
 from app.models.resultat_analyse import ResultatAnalyse
 from app.models.tache_analyse import TacheAnalyse
 from app.services.analyse import analyser_fichier
-from app.services.stockage import lire_fichier
+from app.services.journal import consigner
+from app.services.stockage import FichierPhysiqueIntrouvable, lire_fichier
 
 
 def traiter_tache(tache_id: str, forcer: bool = False) -> None:
@@ -44,6 +45,14 @@ def traiter_tache(tache_id: str, forcer: bool = False) -> None:
 
         try:
             contenu = lire_fichier(fichier.chemin_stockage)
+        except FichierPhysiqueIntrouvable as err:
+            # inutile de réessayer : le fichier a disparu du disque
+            tache.statut = "echoue"
+            consigner(base, "analyse_echouee", str(err), fichier_id=fichier.id)
+            base.commit()
+            return
+
+        try:
             resultat = analyser_fichier(contenu, fichier.type_fichier)
 
             resume = resultat.get("resume") or {}
@@ -82,10 +91,18 @@ def traiter_tache(tache_id: str, forcer: bool = False) -> None:
 
             tache.statut = "termine"
             tache.termine_le = datetime.now(timezone.utc)
+            consigner(
+                base,
+                "analyse_terminee",
+                f"{len(anomalies)} anomalie(s), {len(recommandations)} recommandation(s)",
+                fichier_id=fichier.id,
+            )
             base.commit()
         except Exception:
             base.rollback()
             tache.statut = "echoue" if tache.tentatives >= 3 else "en_attente"
+            if tache.statut == "echoue":
+                consigner(base, "analyse_echouee", "Échec après 3 tentatives", fichier_id=tache.fichier_id)
             base.commit()
     finally:
         base.close()

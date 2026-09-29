@@ -51,3 +51,32 @@ export async function appelerAPI(chemin, options = {}) {
   if (reponse.status === 204) return null;
   return reponse.json();
 }
+
+export async function telechargerFichier(chemin, nomSortie) {
+  const entetes = {};
+  const jeton = obtenirJeton();
+  if (jeton) entetes["Authorization"] = `Bearer ${jeton}`;
+
+  const reponse = await fetch(`${BASE_URL}${chemin}`, { headers: entetes });
+  if (reponse.status === 401) {
+    deconnecter();
+    window.location.href = "/connexion";
+    throw new Error("Session expirée");
+  }
+  if (!reponse.ok) {
+    const erreur = await reponse.json().catch(() => ({}));
+    throw new Error(
+      typeof erreur.detail === "string" ? erreur.detail : `Erreur ${reponse.status}`
+    );
+  }
+
+  const blob = await reponse.blob();
+  const url = URL.createObjectURL(blob);
+  const lien = document.createElement("a");
+  lien.href = url;
+  lien.download = nomSortie;
+  document.body.appendChild(lien);
+  lien.click();
+  lien.remove();
+  URL.revokeObjectURL(url);
+}

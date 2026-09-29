@@ -19,3 +19,9 @@ class Utilisateur(Base):
 
     organisation = relationship("Organisation", back_populates="utilisateurs")
     fichiers = relationship("Fichier", back_populates="proprietaire")
+    journal = relationship(
+        "JournalActivite", back_populates="utilisateur", cascade="all, delete-orphan"
+    )
+
+# Import tardif : fait connaître JournalActivite au mapper d'Utilisateur.
+from app.models.journal import JournalActivite  # noqa: E402,F401

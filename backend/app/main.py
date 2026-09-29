@@ -8,11 +8,15 @@ from app.api.equipe import routeur as routeur_equipe
 from app.api.fichiers import routeur as routeur_fichiers
 from app.api.insights import routeur as routeur_insights
 from app.api.parametres import routeur as routeur_parametres
+from app.core.database import Base, moteur
+from app.core.migration import migrer_schema
 from app.workers.traitement import relancer_taches_bloquees
 
 
 @asynccontextmanager
 async def cycle_vie(app: FastAPI):
+    Base.metadata.create_all(bind=moteur)
+    migrer_schema()
     relancer_taches_bloquees()
     yield
 

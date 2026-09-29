@@ -9,6 +9,8 @@ class FichierSortie(BaseModel):
     type_fichier: str
     taille: int
     cree_le: datetime
+    disponible: bool = True
+    version: int = 1
 
     class Config:
         from_attributes = True
@@ -19,6 +21,18 @@ class TacheSortie(BaseModel):
     fichier_id: str
     statut: str
     tentatives: int
+    fichier_disponible: bool | None = None
+
+    class Config:
+        from_attributes = True
+
+
+class EntreeJournal(BaseModel):
+    id: str
+    action: str
+    details: str | None
+    cree_le: datetime
+    fichier_id: str | None
 
     class Config:
         from_attributes = True
@@ -36,6 +50,51 @@ class ResultatSortie(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class VersionAnalyse(BaseModel):
+    id: str
+    nom_original: str
+    taille: int
+    version: int
+    cree_le: datetime
+    disponible: bool = True
+
+
+class ComparaisonSortie(BaseModel):
+    """Écarts entre cette version du fichier et la précédente."""
+
+    precedent: VersionAnalyse
+    courant: VersionAnalyse
+    diff: dict
+
+
+class RepereMarche(BaseModel):
+    """Un indicateur du fichier confronté à la référence externe."""
+
+    id: str
+    libelle: str
+    unite: str
+    valeur_fichier: float
+    valeur_reference: float
+    ecart: float
+    position: str  # dessus | dessous | aligne
+    favorable: bool
+
+
+class MarcheSortie(BaseModel):
+    """Croisement avec le référentiel externe (données de marché)."""
+
+    disponible: bool
+    raison: str | None = None
+    secteur: str | None = None
+    domaine: str | None = None  # commercial | generique
+    note: str | None = None
+    source: dict | None = None
+    reperes: list[RepereMarche] = []
+    lectures: list[str] = []
+    colonne_mesure: str | None = None
+    avertissement: str | None = None
 
 
 class InsightItem(BaseModel):

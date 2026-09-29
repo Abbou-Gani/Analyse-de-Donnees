@@ -18,4 +18,6 @@ class TacheAnalyse(Base):
     termine_le: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
     fichier = relationship("Fichier", back_populates="taches")
-    resultat = relationship("ResultatAnalyse", back_populates="tache", uselist=False)
+    resultat = relationship(
+        "ResultatAnalyse", back_populates="tache", uselist=False, cascade="all, delete-orphan"
+    )
